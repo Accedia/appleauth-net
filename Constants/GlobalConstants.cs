@@ -1,5 +1,8 @@
 ﻿namespace AppleAuth.Constants
 {
+    /// <summary>
+    /// Globally used constants.
+    /// </summary>
     internal static class GlobalConstants
     {
         internal const string AppleAuthorizeTokenURL = "https://appleid.apple.com/auth/token";

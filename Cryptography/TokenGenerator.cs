@@ -1,12 +1,12 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AppleAuth.Constants;
+using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Net.Http;
-using AppleAuth.Constants;
 using System.Text;
 
 namespace AppleAuth.Cryptography

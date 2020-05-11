@@ -1,5 +1,8 @@
 ﻿namespace AppleAuth.Constants
 {
+    /// <summary>
+    /// JSON Web Token Claims constants.
+    /// </summary>
     internal static class ClaimConstants
     {
         internal const string Issuer = "iss";
