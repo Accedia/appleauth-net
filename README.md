@@ -1,6 +1,6 @@
 # What is AppleAuth.NET?
 AppleAuth is a very simple library for .NET that encapsulates the logic for communicating with [Apple's REST API for Sign in with Apple](https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_rest_api).
-The main goal is to make the implementation of [Sign in with Apple]() easier for any web application.
+The main goal is to make the implementation of [Sign in with Apple](https://developer.apple.com/sign-in-with-apple/) easier for any web application.
 
 # How to use it.
 ## Installation
@@ -9,7 +9,7 @@ To install the package execute the following command in your Package Manager Con
 PM> Install-Package AppleAuth
 ```
 Or alternatively just install the package using Nuget package manager. The project can be found here:
-[Link to NuGet]()
+[Link to NuGet](https://www.nuget.org/packages/AppleAuth.NET/1.0.0)
 
 ## Using ```AppleAuthProvider.cs```
 Create new instance of `AppleAuthProvider`, pass the required parameters and you are good to go. Use the `GetAuthorizationToken` method to get an authorization token from Apple; Use the `GetRefreshToken` method to verify if a user is still using 'Sign in with Apple' to sign in your system; Use the `GetButtonHref` method to get a query string for the 'Sign in with Apple' button.

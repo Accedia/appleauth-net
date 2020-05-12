@@ -4,6 +4,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Danail Stoichkov</Authors>
     <Company>Accedia JSC</Company>
+    <Product>AppleAuth.NET</Product>
+    <PackageId>AppleAuth.NET</PackageId>
+    <Description>AppleAuth.NET is a simple library that facilitates the implementation of "Sign in with Apple" in a .NET application.</Description>
+    <Copyright>Copyright (c) 2020 Accedia JSC</Copyright>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/Accedia/appleauth-net</RepositoryUrl>
+    <PackageReleaseNotes>Initial version which includes the main functionality for making requests to Sign in with Apple's REST API.</PackageReleaseNotes>
+    <PackageTags>apple signin aspnet net</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -14,6 +22,13 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.1" />
     <PackageReference Include="System.Security.Cryptography.Cng" Version="4.7.0" />
     <PackageReference Include="System.Text.Json" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
