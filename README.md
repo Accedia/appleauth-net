@@ -2,7 +2,7 @@
 AppleAuth is a very simple library for .NET that encapsulates the logic for communicating with [Apple's REST API for Sign in with Apple](https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_rest_api).
 The main goal is to make the implementation of [Sign in with Apple](https://developer.apple.com/sign-in-with-apple/) easier for any web application.
 
-# How to use it.
+# How to use it?
 ## Installation
 To install the package execute the following command in your Package Manager Console:
 ```javascript

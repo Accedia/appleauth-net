@@ -6,7 +6,6 @@ using AppleAuth.TokenObjects;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
@@ -153,21 +152,6 @@ namespace AppleAuth
                 UserID = sub,
                 TimeOfAuthentication = timeOfAuthentication
             };
-        }
-
-        /// <summary>
-        /// Uses System.IO.StreamReader to read string from Stream
-        /// </summary>
-        private string ReadPrivateKeyFromStream(Stream keyFile)
-        {
-            string key = "";
-
-            using (var reader = new StreamReader(keyFile))
-            {
-                key = reader.ReadToEnd();
-            }
-
-            return key;
         }
 
         /// <summary>
