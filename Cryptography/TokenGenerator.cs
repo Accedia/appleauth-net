@@ -77,7 +77,7 @@ namespace AppleAuth.Cryptography
             var expClaim = claims.FirstOrDefault(x => x.Type == ClaimConstants.Expiration).Value;
             var expirationTime = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expClaim)).DateTime;
 
-            if (expirationTime > DateTime.Now)
+            if (expirationTime < DateTime.UtcNow)
             {
                 throw new SecurityTokenExpiredException("Expired token");
             }
