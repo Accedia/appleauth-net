@@ -11,7 +11,7 @@ To install the package execute the following command in your Package Manager Con
 PM> Install-Package AppleAuth
 ```
 Or alternatively just install the package using Nuget package manager. The project can be found here:
-[Link to NuGet](https://www.nuget.org/packages/AppleAuth.NET/1.0.0)
+[Link to NuGet](https://www.nuget.org/packages/AppleAuth.NET)
 
 # Prerequisites
 ## Configure Sign in with Apple from the Developer Portal
