@@ -10,8 +10,9 @@
     <Copyright>Copyright (c) 2020 Accedia JSC</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <RepositoryUrl>https://github.com/Accedia/appleauth-net</RepositoryUrl>
-    <PackageReleaseNotes>Initial version which includes the main functionality for making requests to Sign in with Apple's REST API.</PackageReleaseNotes>
+    <PackageReleaseNotes>Updates to validation of token expiration; Updates to README.md</PackageReleaseNotes>
     <PackageTags>apple signin aspnet net</PackageTags>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
