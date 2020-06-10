@@ -23,6 +23,12 @@ There you can find the information for configuring Sign in with Apple for your a
 Next, you have to configure your web page for Sign in with Apple. Follow the guidelines from the official [documentation](https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_js/configuring_your_webpage_for_sign_in_with_apple). You can also refer to this [link](https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_js/displaying_sign_in_with_apple_buttons) to see how to setup the styles of the buttons.
 
 # Example
+> **_NOTE:_** 
+If you are deploying your app to an Azure Web App make sure you add the following setting: `WEBSITE_LOAD_USER_PROFILE = 1`, so IIS can access the private key storage under the user account store.
+You can apply this from the Azure portal from Configuration > Application Settings, or you can run the following command in Cloud Shell:   
+``` az webapp config appsettings set --name <app-name> --resource-group <resource-group-name> --settings WEBSITE_LOAD_USER_PROFILE=1 ```.  
+It's also important to note that this setting is available only for non-shared pricing tiers.
+
 ## Using ```AppleAuthProvider.cs```
 Create new instance of `AppleAuthProvider`, pass the required parameters and you are good to go. Use the `GetAuthorizationToken` method to get an authorization token from Apple; Use the `GetRefreshToken` method to verify if a user is still using 'Sign in with Apple' to sign in your system; Use the `GetButtonHref` method to get a query string for the 'Sign in with Apple' button.
 
@@ -45,14 +51,25 @@ After that just call GetAuthorizationToken() method passing ```code``` from your
 Keep in mind that tokens returned from Apple are short-lived, so you should create a session or a user in your system using the returned ```AppleAuth.TokenObjects.AuthorizationToken ``` object. After that you can verify if the user is still logged in using "Sign in with Apple" by retrieving a refresh token using the ```GetRefreshToken``` method:
 
 ```c#
+        [HttpPost]
         public async Task<bool> IsUserUsingAppleID()
         {
             string privateKey = System.IO.File.ReadAllText("path/to/file.p8");
 
-            AppleAuth.AppleAuthProvider provider = new AppleAuthProvider("MyClientID", "MyTeamID", "MyKeyID", "https://myredirecturl.com/HandleResponseFromApple", "State1");
+            AppleAuth.AppleAuthProvider provider = new AppleAuthProvider("MyClientID", "MyTeamID", "MyKeyID", "https://myredirecturl.com/HandleResponseFromApple", "SomeState");
 
             AppleAuth.TokenObjects.AuthorizationToken refreshToken = await provider.GetRefreshToken(authorizationToken.RefreshToken, privateKey);
 
             return refreshToken != null;
         }
 ```
+# Contributing
+
+You are more than welcome to contribute to the project and make it better. When contributing please try to maintain a strictly professional, respectful and friendly attitude. Also make sure you communicate the change you want to make via issue or any other method with the owners of this repository.
+
+### **Creating a pull request**
+We do not have any strict guidelines for creating pull requests, but you can use the already known [GitHub flow]("https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project") for general guidelines.
+
+
+# License
+This project is licensed under the MIT License - see [LICENSE.md](https://github.com/Accedia/appleauth-net/blob/master/LICENSE.md) for details
