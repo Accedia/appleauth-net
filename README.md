@@ -8,7 +8,7 @@ The main goal is to make the implementation of [Sign in with Apple](https://deve
 ## Installation
 To install the package execute the following command in your Package Manager Console:
 ```javascript
-PM> Install-Package AppleAuth
+PM> Install-Package AppleAuth.NET
 ```
 Or alternatively just install the package using Nuget package manager. The project can be found here:
 [Link to NuGet](https://www.nuget.org/packages/AppleAuth.NET)
