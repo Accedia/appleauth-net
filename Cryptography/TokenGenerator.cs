@@ -31,9 +31,7 @@ namespace AppleAuth.Cryptography
         {
             var key = GetFormattedPrivateKey(privateKey);
 
-            var cngKey = CngKey.Import(
-  Convert.FromBase64String(key),
-  CngKeyBlobFormat.Pkcs8PrivateBlob);
+            var cngKey = CngKey.Import(Convert.FromBase64String(key), CngKeyBlobFormat.Pkcs8PrivateBlob);
 
             var ecDsaCng = new ECDsaCng(cngKey);
             ecDsaCng.HashAlgorithm = CngAlgorithm.ECDsaP256;
@@ -100,7 +98,7 @@ namespace AppleAuth.Cryptography
         /// <summary>
         /// Removes empty lines from string; Also removes lines like the following:"-----BEGIN PRIVATE KEY-----"
         /// </summary>
-        private string GetFormattedPrivateKey(string keyString)
+        public string GetFormattedPrivateKey(string keyString)
         {
             StringBuilder cleanedKey = new StringBuilder();
             var keyLines = keyString.Split(GlobalConstants.NewLineSeparators, StringSplitOptions.RemoveEmptyEntries);
