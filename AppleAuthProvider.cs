@@ -137,21 +137,25 @@ namespace AppleAuth
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var deserializeUserInformation = tokenHandler.ReadJwtToken(tokenResponse.Token);
-            var claims = deserializeUserInformation.Claims;
 
-            var email = claims.FirstOrDefault(x => x.Type == ClaimConstants.Email).Value;
-            var email_verified = claims.FirstOrDefault(x => x.Type == ClaimConstants.EmailVerified).Value;
-            var sub = claims.FirstOrDefault(x => x.Type == ClaimConstants.Sub).Value;
-            var auth_time = claims.FirstOrDefault(x => x.Type == ClaimConstants.AuthenticationTime).Value;
-            var timeOfAuthentication = DateTimeOffset.FromUnixTimeSeconds(long.Parse(auth_time)).DateTime;
-
-            tokenResponse.UserInformation = new UserInformation
+            if (deserializeUserInformation != null && deserializeUserInformation.Claims.Any())
             {
-                Email = email,
-                EmailVerified = email_verified,
-                UserID = sub,
-                TimeOfAuthentication = timeOfAuthentication
-            };
+                var claims = deserializeUserInformation.Claims;
+
+                var email = claims.FirstOrDefault(x => x.Type == ClaimConstants.Email);
+                var email_verified = claims.FirstOrDefault(x => x.Type == ClaimConstants.EmailVerified);
+                var sub = claims.FirstOrDefault(x => x.Type == ClaimConstants.Sub);
+                var auth_time = claims.FirstOrDefault(x => x.Type == ClaimConstants.AuthenticationTime).Value;
+                var timeOfAuthentication = DateTimeOffset.FromUnixTimeSeconds(long.Parse(auth_time)).DateTime;
+
+                tokenResponse.UserInformation = new UserInformation
+                {
+                    Email = email != null ? email.Value : string.Empty,
+                    EmailVerified = email_verified != null ? email_verified.Value : "False",
+                    UserID = sub != null ? sub.Value : string.Empty,
+                    TimeOfAuthentication = timeOfAuthentication
+                };
+            }
         }
 
         /// <summary>
