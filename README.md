@@ -1,4 +1,4 @@
-[![NuGet](https://img.shields.io/badge/nuget-v1.0.1-blue)](https://www.nuget.org/packages/AppleAuth.NET/1.0.1)
+[![NuGet](https://img.shields.io/badge/nuget-v1.0.2-blue)](https://www.nuget.org/packages/AppleAuth.NET/1.0.2)
 
 # What is AppleAuth.NET?
 AppleAuth is a very simple library for .NET that encapsulates the logic for communicating with [Apple's REST API for Sign in with Apple](https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_rest_api).
@@ -18,6 +18,8 @@ Or alternatively just install the package using Nuget package manager. The proje
 In order to use Sign in with Apple you must enroll in the [Apple Developer Program](https://developer.apple.com/programs/enroll/).
 After you have enrolled in the program go to [Developer Account Help](https://help.apple.com/developer-account/) and navigate to Configure app capabilities > Sign in with Apple.
 There you can find the information for configuring Sign in with Apple for your app.
+
+You can also checkout my [blogpost](https://accedia.com/blog/dotnetifying-sign-in-with-apple/) for more information on setting the settings in your developer account implementing Sign in with Apple.
 
 ## Display the "Sign in with Apple" button
 Next, you have to configure your web page for Sign in with Apple. Follow the guidelines from the official [documentation](https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_js/configuring_your_webpage_for_sign_in_with_apple). You can also refer to this [link](https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_js/displaying_sign_in_with_apple_buttons) to see how to setup the styles of the buttons.

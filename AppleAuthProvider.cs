@@ -33,7 +33,7 @@ namespace AppleAuth
         private readonly TokenGenerator _tokenGenerator = new TokenGenerator();
 
         /// <summary>Constructor which initializes new instance of AppleAuthProvider with parameters used in the requests to Apple</summary>
-        /// <param name="clientId">A10-character key identifier obtained from your developer account. (aka "Service ID" that is configured for “Sign In with Apple”)</param>
+        /// <param name="clientId">Identifier that is set and obtained from your developer account. (aka "Service ID" that is configured for “Sign In with Apple”)</param>
         /// <param name="teamId">A 10-character key identifier obtained from your developer account.</param>
         /// <param name="keyId">A 10-character key identifier obtained from your developer account. Configured for "Sign In with Apple" </param>
         /// <param name="redirectUrl">URL to which the user will be redirected after successful verification. 
