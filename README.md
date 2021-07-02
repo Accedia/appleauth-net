@@ -24,12 +24,14 @@ You can also checkout my [blogpost](https://accedia.com/blog/dotnetifying-sign-i
 ## Display the "Sign in with Apple" button
 Next, you have to configure your web page for Sign in with Apple. Follow the guidelines from the official [documentation](https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_js/configuring_your_webpage_for_sign_in_with_apple). You can also refer to this [link](https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_js/displaying_sign_in_with_apple_buttons) to see how to setup the styles of the buttons.
 
-# Example
-> **_NOTE:_** 
+## Configure your hosting environment
 If you are deploying your app to an Azure Web App make sure you add the following setting: `WEBSITE_LOAD_USER_PROFILE = 1`, so IIS can access the private key storage under the user account store.
 You can apply this from the Azure portal from Configuration > Application Settings, or you can run the following command in Cloud Shell:   
 ``` az webapp config appsettings set --name <app-name> --resource-group <resource-group-name> --settings WEBSITE_LOAD_USER_PROFILE=1 ```.  
 It's also important to note that this setting is available only for non-shared pricing tiers.
+
+If you are deploying your app to your own webserver, running Microsoft IIS, you'll need to enable "Load User Profile" under "Advanced settings" on your Application Pool. Otherwise you'll get a CryptographicException saying "The system cannot find the file specified".
+# Example
 
 ## Using ```AppleAuthProvider.cs```
 Create new instance of `AppleAuthProvider`, pass the required parameters and you are good to go. Use the `GetAuthorizationToken` method to get an authorization token from Apple; Use the `GetRefreshToken` method to verify if a user is still using 'Sign in with Apple' to sign in your system; Use the `GetButtonHref` method to get a query string for the 'Sign in with Apple' button.
