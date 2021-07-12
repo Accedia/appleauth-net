@@ -30,11 +30,9 @@ namespace AppleAuth.Cryptography
         public string GenerateAppleClientSecret(string privateKey, string teamId, string clientId, string keyId)
         {
             var key = GetFormattedPrivateKey(privateKey);
+            var ecDsaCng = ECDsa.Create();
 
-            var cngKey = CngKey.Import(Convert.FromBase64String(key), CngKeyBlobFormat.Pkcs8PrivateBlob);
-
-            var ecDsaCng = new ECDsaCng(cngKey);
-            ecDsaCng.HashAlgorithm = CngAlgorithm.ECDsaP256;
+            ecDsaCng.ImportPkcs8PrivateKey(Convert.FromBase64String(key), out var _);
 
             var signingCredentials = new SigningCredentials(
               new ECDsaSecurityKey(ecDsaCng), SecurityAlgorithms.EcdsaSha256);
@@ -70,7 +68,8 @@ namespace AppleAuth.Cryptography
         {
             var deserializedToken = _tokenHandler.ReadJwtToken(token);
             var claims = deserializedToken.Claims;
-            SecurityKey publicKey; SecurityToken validatedToken;
+
+            SecurityKey publicKey;
 
             var expClaim = claims.FirstOrDefault(x => x.Type == ClaimConstants.Expiration).Value;
             var expirationTime = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expClaim)).DateTime;
@@ -92,7 +91,7 @@ namespace AppleAuth.Cryptography
                 ValidAudience = clientId
             };
 
-            _tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+            _tokenHandler.ValidateToken(token, validationParameters, out var _);
         }
 
         /// <summary>
