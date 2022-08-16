@@ -26,8 +26,9 @@ namespace AppleAuth.Cryptography
         /// <param name="teamId"></param>
         /// <param name="clientId"></param>
         /// <param name="keyId"></param>
+        /// <param name="expiration"></param>
         /// <returns></returns>
-        public string GenerateAppleClientSecret(string privateKey, string teamId, string clientId, string keyId)
+        public string GenerateAppleClientSecret(string privateKey, string teamId, string clientId, string keyId, int expiration = 5)
         {
             var key = GetFormattedPrivateKey(privateKey);
             var ecDsaCng = ECDsa.Create();
@@ -43,7 +44,7 @@ namespace AppleAuth.Cryptography
             {
                 new Claim(ClaimConstants.Issuer, teamId),
                 new Claim(ClaimConstants.IssuedAt, EpochTime.GetIntDate(now).ToString(), ClaimValueTypes.Integer64),
-                new Claim(ClaimConstants.Expiration, EpochTime.GetIntDate(now.AddMinutes(5)).ToString(), ClaimValueTypes.Integer64),
+                new Claim(ClaimConstants.Expiration, EpochTime.GetIntDate(now.AddMinutes(expiration)).ToString(), ClaimValueTypes.Integer64),
                 new Claim(ClaimConstants.Audience, "https://appleid.apple.com"),
                 new Claim(ClaimConstants.Sub, clientId)
             };
