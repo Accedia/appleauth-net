@@ -40,7 +40,7 @@ namespace AppleAuth
         /// <param name="redirectUrl">URL to which the user will be redirected after successful verification. 
         /// You need to configure a verified domain and map the redirect URL to it. Can’t be an IP address or localhost </param>
         /// <param name="state">Can be used for any internal identifiers (e.g. Session IDs, User IDs, Query Strings, etc.)</param>
-        /// <param name="expiration">Can be used to add an expiration for the client secret when generated, defaults to 5 if not specified.</param>
+        /// <param name="expiration">Can be used to add an expiration for the client secret when generated. Defaults to 5 if not specified.</param>
         public AppleAuthProvider(string clientId, string teamId, string keyId, string redirectUrl, string state, int expiration = 5)
         {
             ClientID = clientId;
