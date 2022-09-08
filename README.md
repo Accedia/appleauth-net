@@ -1,4 +1,4 @@
-[![NuGet](https://img.shields.io/badge/nuget-v1.0.3-blue)](https://www.nuget.org/packages/AppleAuth.NET/1.0.3)
+[![NuGet](https://img.shields.io/badge/nuget-v1.0.3-blue)](https://www.nuget.org/packages/AppleAuth.NET/1.0.4)
 
 # What is AppleAuth.NET?
 AppleAuth is a very simple library for .NET that encapsulates the logic for communicating with [Apple's REST API for Sign in with Apple](https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_rest_api).
