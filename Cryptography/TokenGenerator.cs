@@ -40,11 +40,13 @@ namespace AppleAuth.Cryptography
 
             var now = DateTime.UtcNow;
 
+            var expiresInMinutes = expiration > 5 ? now.AddMinutes(expiration) : now.AddMinutes(5);
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimConstants.Issuer, teamId),
                 new Claim(ClaimConstants.IssuedAt, EpochTime.GetIntDate(now).ToString(), ClaimValueTypes.Integer64),
-                new Claim(ClaimConstants.Expiration, EpochTime.GetIntDate(now.AddMinutes(expiration)).ToString(), ClaimValueTypes.Integer64),
+                new Claim(ClaimConstants.Expiration, EpochTime.GetIntDate(expiresInMinutes).ToString(), ClaimValueTypes.Integer64),
                 new Claim(ClaimConstants.Audience, "https://appleid.apple.com"),
                 new Claim(ClaimConstants.Sub, clientId)
             };
@@ -52,7 +54,7 @@ namespace AppleAuth.Cryptography
             var token = new JwtSecurityToken(
                 issuer: teamId,
                 claims: claims,
-                expires: now.AddMinutes(5),
+                expires: expiresInMinutes,
                 signingCredentials: signingCredentials);
 
             token.Header.Add(ClaimConstants.KeyID, keyId);
