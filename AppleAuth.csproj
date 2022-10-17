@@ -13,7 +13,6 @@
     <PackageReleaseNotes>Replaced CngKey with ECDsa for Linux compatibility.</PackageReleaseNotes>
     <PackageTags>apple signin aspnet net</PackageTags>
     <Version>1.0.3</Version>
-    <Configurations>Release;Debug</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
