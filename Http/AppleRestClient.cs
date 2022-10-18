@@ -20,7 +20,7 @@ namespace AppleAuth.Http
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        internal async Task<string> SentTokenRequest(HttpRequestMessage request)
+        internal async Task<string> SendRequest(HttpRequestMessage request)
         {
             var response = await _httpClient.SendAsync(request);
             var content = await response.Content.ReadAsStringAsync();
@@ -56,6 +56,28 @@ namespace AppleAuth.Http
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
             return new HttpRequestMessage(HttpMethod.Post, GlobalConstants.AppleAuthorizeTokenURL) { Content = content };
+        }
+
+        internal HttpRequestMessage GenerateRevokeMessage(string token, string clientSecret, string clientId, string tokenType)
+        {
+            var bodyAsPairs = new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("client_id", clientId),
+                new KeyValuePair<string, string>("client_secret", clientSecret),
+                new KeyValuePair<string, string>("token", token)
+            };
+
+            if (!string.IsNullOrEmpty(tokenType))
+            {
+                bodyAsPairs.Add(new KeyValuePair<string, string>("token_type_hint", tokenType));
+                
+            }
+
+            var content = new FormUrlEncodedContent(bodyAsPairs);
+
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+            return new HttpRequestMessage(HttpMethod.Post, GlobalConstants.AppleAuthorizeRevokeURL) { Content = content };
         }
     }
 }

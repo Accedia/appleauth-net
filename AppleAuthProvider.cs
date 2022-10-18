@@ -75,7 +75,7 @@ namespace AppleAuth
 
             HttpRequestMessage request = _appleRestClient.GenerateRequestMessage(TokenType.AuthorizationCode, authorizationCode, clientSecret, ClientID, RedirectURL);
 
-            string response = await _appleRestClient.SentTokenRequest(request);
+            string response = await _appleRestClient.SendRequest(request);
 
             var tokenResponse = JsonSerializer.Deserialize<AuthorizationToken>(response);
 
@@ -108,11 +108,34 @@ namespace AppleAuth
 
             HttpRequestMessage request = _appleRestClient.GenerateRequestMessage(TokenType.RefreshToken, refreshToken, clientSecret, ClientID, RedirectURL);
 
-            string response = await _appleRestClient.SentTokenRequest(request);
+            string response = await _appleRestClient.SendRequest(request);
 
             var refreshTokenObject = JsonSerializer.Deserialize<AuthorizationToken>(response);
 
             return refreshTokenObject;
+        }
+
+        /// <summary>
+        /// Invalidate the tokens and associated user authorizations for a user when they are no longer associated with your app.
+        /// https://developer.apple.com/documentation/sign_in_with_apple/revoke_tokens
+        /// </summary>
+        /// <exception cref="AppleRequestException">
+        /// Thrown when HTTP response from Apple is different than 200 OK.
+        /// </exception>
+        ///<remarks>
+        /// For reference of Apple's error responses visit: https://developer.apple.com/documentation/sign_in_with_apple/errorresponse
+        /// </remarks>
+        /// <param name="token">The user refresh token or access token intended to be revoked. The user session associated with the token provided is revoked if the request is successful.</param>
+        /// <param name="privateKey">Content of the .p8 key file.</param>
+        /// <param name="tokenType">TokenType.AccessToken or TokenType.RefreshToken. Optional</param>
+        public async Task RevokeToken(string token, string privateKey, string tokenType)
+        {
+            ValidateStringParameters(new List<string> { token, privateKey });
+            string clientSecret = _tokenGenerator.GenerateAppleClientSecret(privateKey, TeamID, ClientID, KeyID);
+
+            HttpRequestMessage request = _appleRestClient.GenerateRevokeMessage(token, clientSecret, ClientID, tokenType);
+
+            string response = await _appleRestClient.SendRequest(request);
         }
 
         /// <summary>

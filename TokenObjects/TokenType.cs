@@ -13,5 +13,9 @@
         /// Used for verifying if a token is valid.
         /// </summary>
         public const string RefreshToken = "refresh_token";
+        /// <summary>
+        ///
+        /// </summary>
+        public const string AccessToken = "access_token";
     }
 }
