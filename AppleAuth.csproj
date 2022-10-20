@@ -10,9 +10,11 @@
     <Copyright>Copyright (c) 2020 Accedia JSC</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <RepositoryUrl>https://github.com/Accedia/appleauth-net</RepositoryUrl>
-    <PackageReleaseNotes>Replaced CngKey with ECDsa for Linux compatibility.</PackageReleaseNotes>
+    <PackageReleaseNotes>Functionality for token revoke;
+Allow user to set token expiration;</PackageReleaseNotes>
     <PackageTags>apple signin aspnet net</PackageTags>
-    <Version>1.0.3</Version>
+    <Version>1.0.5</Version>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -26,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="README.md" />
     <None Include="LICENSE.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
