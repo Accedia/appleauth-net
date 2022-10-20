@@ -58,6 +58,9 @@ namespace AppleAuth.Http
             return new HttpRequestMessage(HttpMethod.Post, GlobalConstants.AppleAuthorizeTokenURL) { Content = content };
         }
 
+        /// <summary>
+        /// Generates an HttpRequestMessage for token revoke as described in Apple's documentation: https://developer.apple.com/documentation/sign_in_with_apple/revoke_tokens
+        /// </summary>
         internal HttpRequestMessage GenerateRevokeMessage(string token, string clientSecret, string clientId, string tokenType)
         {
             var bodyAsPairs = new List<KeyValuePair<string, string>>()
