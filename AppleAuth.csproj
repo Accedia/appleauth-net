@@ -10,11 +10,11 @@
     <Copyright>Copyright (c) 2020 Accedia JSC</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <RepositoryUrl>https://github.com/Accedia/appleauth-net</RepositoryUrl>
-    <PackageReleaseNotes>Functionality for token revoke;
-Allow user to set token expiration;</PackageReleaseNotes>
+    <PackageReleaseNotes>Implement use of nonce</PackageReleaseNotes>
     <PackageTags>apple signin aspnet net</PackageTags>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -28,7 +28,10 @@ Allow user to set token expiration;</PackageReleaseNotes>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="README.md" />
+    <None Include="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="LICENSE.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

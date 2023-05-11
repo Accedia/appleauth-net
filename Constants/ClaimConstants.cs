@@ -15,5 +15,6 @@
         internal const string Email = "email";
         internal const string EmailVerified = "email_verified";
         internal const string AuthenticationTime = "auth_time";
+        internal const string Nonce = "nonce";
     }
 }

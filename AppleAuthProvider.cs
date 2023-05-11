@@ -173,13 +173,15 @@ namespace AppleAuth
                 var sub = claims.FirstOrDefault(x => x.Type == ClaimConstants.Sub);
                 var auth_time = claims.FirstOrDefault(x => x.Type == ClaimConstants.AuthenticationTime).Value;
                 var timeOfAuthentication = DateTimeOffset.FromUnixTimeSeconds(long.Parse(auth_time)).DateTime;
+                var nonce = claims.FirstOrDefault(x => x.Type == ClaimConstants.Nonce);
 
                 tokenResponse.UserInformation = new UserInformation
                 {
                     Email = email != null ? email.Value : string.Empty,
                     EmailVerified = email_verified != null ? email_verified.Value : "False",
                     UserID = sub != null ? sub.Value : string.Empty,
-                    TimeOfAuthentication = timeOfAuthentication
+                    TimeOfAuthentication = timeOfAuthentication,
+                    Nonce = nonce != null ? nonce.Value : string.Empty
                 };
             }
         }
