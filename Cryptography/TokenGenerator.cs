@@ -31,12 +31,25 @@ namespace AppleAuth.Cryptography
         public string GenerateAppleClientSecret(string privateKey, string teamId, string clientId, string keyId, int expiration = 5)
         {
             var key = GetFormattedPrivateKey(privateKey);
+#if NETSTANDARD2_1_OR_GREATER
+
             var ecDsaCng = ECDsa.Create();
 
             ecDsaCng.ImportPkcs8PrivateKey(Convert.FromBase64String(key), out var _);
 
             var signingCredentials = new SigningCredentials(
               new ECDsaSecurityKey(ecDsaCng), SecurityAlgorithms.EcdsaSha256);
+
+
+#else
+            var cngKey = CngKey.Import(Convert.FromBase64String(key), CngKeyBlobFormat.Pkcs8PrivateBlob);
+
+            var ecDsaCng = new ECDsaCng(cngKey);
+            ecDsaCng.HashAlgorithm = CngAlgorithm.ECDsaP256;
+
+            var signingCredentials = new SigningCredentials(
+              new ECDsaSecurityKey(ecDsaCng), SecurityAlgorithms.EcdsaSha256);
+#endif
 
             var now = DateTime.UtcNow;
 
