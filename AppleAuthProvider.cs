@@ -30,7 +30,7 @@ namespace AppleAuth
         private static string RedirectURL { get; set; }
         private string State { get; set; }
         private int ExpirationInMinutes { get; set; }
-        private string AndroidPackageIdentifier { get; set; } = string.Empty;
+        private string AndroidPackageIdentifier { get; set; }
 
         private static readonly AppleRestClient _appleRestClient = new AppleRestClient();
         private readonly TokenGenerator _tokenGenerator = new TokenGenerator();
