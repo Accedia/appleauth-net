@@ -30,7 +30,6 @@ namespace AppleAuth
         private static string RedirectURL { get; set; }
         private string State { get; set; }
         private int ExpirationInMinutes { get; set; }
-        private string AndroidPackageIdentifier { get; set; }
 
         private static readonly AppleRestClient _appleRestClient = new AppleRestClient();
         private readonly TokenGenerator _tokenGenerator = new TokenGenerator();
@@ -154,7 +153,7 @@ namespace AppleAuth
 
             return baseUrl + requestParams;
         }
-        
+
         /// <summary>
         /// Generates the URL to perform redirection in the browser on Android devices.
         /// </summary>
@@ -162,8 +161,9 @@ namespace AppleAuth
         /// Body is received as a encoded Form, you must transform the data to a Dictionary
         /// </remarks>
         /// <param name="requestBody">This body is received in callback endpoint, you must allow url-encoded</param>
+        /// <param name="androidPackageIdentifier">Your app's package identifier as published on the Google Play Store</param>
         /// <returns>string/urls</returns>
-        public string GetAndroidButtonHref(Dictionary<string, string> requestBody)
+        public string GetAndroidButtonHref(Dictionary<string, string> requestBody, string androidPackageIdentifier)
         {
             var urlSearchParams = new NameValueCollection();
 
@@ -174,7 +174,7 @@ namespace AppleAuth
 
             var queryString = string.Join("&", urlSearchParams.AllKeys.Select(key => $"{key}={urlSearchParams[key]}"));
 
-            var redirectUrl = $"intent://callback?{queryString}#Intent;package={AndroidPackageIdentifier};scheme=signinwithapple;end";
+            var redirectUrl = $"intent://callback?{queryString}#Intent;package={androidPackageIdentifier};scheme=signinwithapple;end";
 
             return redirectUrl;
         }
