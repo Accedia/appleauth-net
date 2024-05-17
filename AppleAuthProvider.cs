@@ -24,6 +24,7 @@ namespace AppleAuth
     /// </remarks> 
     public class AppleAuthProvider
     {
+        private static Uri BaseUri { get; set; }
         private static string ClientID { get; set; }
         private static string TeamID { get; set; }
         private static string KeyID { get; set; }
@@ -41,9 +42,11 @@ namespace AppleAuth
         /// <param name="redirectUrl">URL to which the user will be redirected after successful verification. 
         /// You need to configure a verified domain and map the redirect URL to it. Can’t be an IP address or localhost </param>
         /// <param name="state">Can be used for any internal identifiers (e.g. Session IDs, User IDs, Query Strings, etc.)</param>
+        /// <param name="uri">Base uri. If no set <see cref="GlobalConstants.BaseUri"/> will be used.</param>
         /// <param name="expiration">Can be used to add an expiration for the client secret when generated. Defaults to 5 if not specified.</param>
-        public AppleAuthProvider(string clientId, string teamId, string keyId, string redirectUrl, string state, int expiration = 5)
+        public AppleAuthProvider(string clientId, string teamId, string keyId, string redirectUrl, string state, int expiration = 5, string uri = null)
         {
+            BaseUri = new Uri(string.IsNullOrWhiteSpace(uri) ? GlobalConstants.BaseUri : uri);
             ClientID = clientId;
             TeamID = teamId;
             KeyID = keyId;
@@ -72,15 +75,15 @@ namespace AppleAuth
         {
             ValidateStringParameters(new List<string> { authorizationCode, privateKey });
 
-            string clientSecret = _tokenGenerator.GenerateAppleClientSecret(privateKey, TeamID, ClientID, KeyID, ExpirationInMinutes);
+            string clientSecret = _tokenGenerator.GenerateAppleClientSecret(privateKey, TeamID, ClientID, KeyID, BaseUri, ExpirationInMinutes);
 
-            HttpRequestMessage request = _appleRestClient.GenerateRequestMessage(TokenType.AuthorizationCode, authorizationCode, clientSecret, ClientID, RedirectURL);
+            HttpRequestMessage request = _appleRestClient.GenerateRequestMessage(TokenType.AuthorizationCode, authorizationCode, clientSecret, ClientID, RedirectURL, BaseUri);
 
             string response = await _appleRestClient.SendRequest(request);
 
             var tokenResponse = JsonSerializer.Deserialize<AuthorizationToken>(response);
 
-            TokenGenerator.VerifyAppleIDToken(tokenResponse.Token, ClientID);
+            TokenGenerator.VerifyAppleIDToken(tokenResponse.Token, ClientID, BaseUri);
 
             SetUserInformation(tokenResponse);
 
@@ -105,9 +108,9 @@ namespace AppleAuth
         public async Task<AuthorizationToken> GetRefreshToken(string refreshToken, string privateKey)
         {
             ValidateStringParameters(new List<string> { refreshToken, privateKey });
-            string clientSecret = _tokenGenerator.GenerateAppleClientSecret(privateKey, TeamID, ClientID, KeyID);
+            string clientSecret = _tokenGenerator.GenerateAppleClientSecret(privateKey, TeamID, ClientID, KeyID, BaseUri);
 
-            HttpRequestMessage request = _appleRestClient.GenerateRequestMessage(TokenType.RefreshToken, refreshToken, clientSecret, ClientID, RedirectURL);
+            HttpRequestMessage request = _appleRestClient.GenerateRequestMessage(TokenType.RefreshToken, refreshToken, clientSecret, ClientID, RedirectURL, BaseUri);
 
             string response = await _appleRestClient.SendRequest(request);
 
@@ -132,9 +135,9 @@ namespace AppleAuth
         public async Task RevokeToken(string token, string privateKey, string tokenType)
         {
             ValidateStringParameters(new List<string> { token, privateKey });
-            string clientSecret = _tokenGenerator.GenerateAppleClientSecret(privateKey, TeamID, ClientID, KeyID);
+            string clientSecret = _tokenGenerator.GenerateAppleClientSecret(privateKey, TeamID, ClientID, KeyID, BaseUri);
 
-            HttpRequestMessage request = _appleRestClient.GenerateRevokeMessage(token, clientSecret, ClientID, tokenType);
+            HttpRequestMessage request = _appleRestClient.GenerateRevokeMessage(token, clientSecret, ClientID, tokenType, BaseUri);
 
             string response = await _appleRestClient.SendRequest(request);
         }
@@ -148,7 +151,7 @@ namespace AppleAuth
         /// <returns>string/url</returns>
         public string GetButtonHref()
         {
-            var baseUrl = GlobalConstants.AppleAuthorizeURL;
+            var baseUrl = new Uri(BaseUri, GlobalConstants.AppleAuthorizeURL).AbsoluteUri;
             var requestParams = $"?client_id={ClientID}&scope=name email&redirect_uri={RedirectURL}&state={State}&response_type=code id_token&response_mode=form_post&usePopup=true";
 
             return baseUrl + requestParams;

@@ -26,9 +26,10 @@ namespace AppleAuth.Cryptography
         /// <param name="teamId"></param>
         /// <param name="clientId"></param>
         /// <param name="keyId"></param>
+        /// <param name="baseUri"></param>
         /// <param name="expiration"></param>
         /// <returns></returns>
-        public string GenerateAppleClientSecret(string privateKey, string teamId, string clientId, string keyId, int expiration = 5)
+        public string GenerateAppleClientSecret(string privateKey, string teamId, string clientId, string keyId, Uri baseUri, int expiration = 5)
         {
             var key = GetFormattedPrivateKey(privateKey);
             var ecDsaCng = ECDsa.Create();
@@ -47,7 +48,7 @@ namespace AppleAuth.Cryptography
                 new Claim(ClaimConstants.Issuer, teamId),
                 new Claim(ClaimConstants.IssuedAt, EpochTime.GetIntDate(now).ToString(), ClaimValueTypes.Integer64),
                 new Claim(ClaimConstants.Expiration, EpochTime.GetIntDate(expiresInMinutes).ToString(), ClaimValueTypes.Integer64),
-                new Claim(ClaimConstants.Audience, "https://appleid.apple.com"),
+                new Claim(ClaimConstants.Audience, baseUri.AbsoluteUri),
                 new Claim(ClaimConstants.Sub, clientId)
             };
 
@@ -67,7 +68,8 @@ namespace AppleAuth.Cryptography
         /// </summary>
         /// <param name="token"></param>
         /// <param name="clientId"></param>
-        public static void VerifyAppleIDToken(string token, string clientId)
+        /// <param name="baseUri"></param>
+        public static void VerifyAppleIDToken(string token, string clientId, Uri baseUri)
         {
             var deserializedToken = _tokenHandler.ReadJwtToken(token);
             var claims = deserializedToken.Claims;
@@ -82,14 +84,14 @@ namespace AppleAuth.Cryptography
                 throw new SecurityTokenExpiredException("Expired token");
             }
 
-            var applePublicKeys = _httpClient.GetAsync("https://appleid.apple.com/auth/keys");
+            var applePublicKeys = _httpClient.GetAsync(new Uri(baseUri, GlobalConstants.ApplePublicKeysURL));
             var keyset = new JsonWebKeySet(applePublicKeys.Result.Content.ReadAsStringAsync().Result);
 
             publicKey = keyset.Keys.FirstOrDefault(x => x.Kid == deserializedToken.Header.Kid);
 
             var validationParameters = new TokenValidationParameters
             {
-                ValidIssuer = "https://appleid.apple.com",
+                ValidIssuer = baseUri.AbsoluteUri,
                 IssuerSigningKey = publicKey,
                 ValidAudience = clientId
             };
