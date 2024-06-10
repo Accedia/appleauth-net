@@ -10,9 +10,9 @@
     <Copyright>Copyright (c) 2020 Accedia JSC</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <RepositoryUrl>https://github.com/Accedia/appleauth-net</RepositoryUrl>
-    <PackageReleaseNotes>Implement method for retrieving apple button url for Android devices</PackageReleaseNotes>
+    <PackageReleaseNotes>Add parameters for base url and query strings</PackageReleaseNotes>
     <PackageTags>apple signin aspnet net</PackageTags>
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>

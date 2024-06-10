@@ -64,17 +64,19 @@ namespace AppleAuth
         /// <params>
         /// <param name="authorizationCode">Received from Apple after successfully redirecting the user</param>
         /// <param name="privateKey">Content of the .p8 key file.</param>
+        /// <param name="baseUrl">By default this is the base url of Sign in with Apple, but you can provide another URL for testing purposes.</param>
+        /// <param name="queryString">By default that is either the /token or /revoke endpoint, but you can provide any query string for testing purposes.</param>        
         /// </params>
         /// <remarks>
         /// For more information about Apple's error responses visit: https://developer.apple.com/documentation/sign_in_with_apple/errorresponse
         /// </remarks>
-        public async Task<AuthorizationToken> GetAuthorizationToken(string authorizationCode, string privateKey)
+        public async Task<AuthorizationToken> GetAuthorizationToken(string authorizationCode, string privateKey, string baseUrl = "https://appleid.apple.com/", string queryString = "auth/token")
         {
             ValidateStringParameters(new List<string> { authorizationCode, privateKey });
 
             string clientSecret = _tokenGenerator.GenerateAppleClientSecret(privateKey, TeamID, ClientID, KeyID, ExpirationInMinutes);
 
-            HttpRequestMessage request = _appleRestClient.GenerateRequestMessage(TokenType.AuthorizationCode, authorizationCode, clientSecret, ClientID, RedirectURL);
+            HttpRequestMessage request = _appleRestClient.GenerateRequestMessage(TokenType.AuthorizationCode, authorizationCode, clientSecret, ClientID, RedirectURL, baseUrl, queryString);
 
             string response = await _appleRestClient.SendRequest(request);
 
@@ -99,15 +101,17 @@ namespace AppleAuth
         /// </remarks>
         /// <param name="refreshToken">Received from Apple when successfully retrieving an AuthorizationToken object</param>
         /// <param name="privateKey">Content of the .p8 key file.</param>
+        /// <param name="baseUrl">By default base url is the url of Sign in with Apple, but you can provide another URL for testing purposes.</param>
+        /// <param name="queryString">By default that is either the /token or /revoke endpoint, but you can provide any query string for testing purposes.</param>
         /// <returns>
         /// AuthorizationToken object containing only AuthorizationCode and Expiration
         /// </returns>
-        public async Task<AuthorizationToken> GetRefreshToken(string refreshToken, string privateKey)
+        public async Task<AuthorizationToken> GetRefreshToken(string refreshToken, string privateKey, string baseUrl = "https://appleid.apple.com/", string queryString = "auth/token")
         {
             ValidateStringParameters(new List<string> { refreshToken, privateKey });
             string clientSecret = _tokenGenerator.GenerateAppleClientSecret(privateKey, TeamID, ClientID, KeyID);
 
-            HttpRequestMessage request = _appleRestClient.GenerateRequestMessage(TokenType.RefreshToken, refreshToken, clientSecret, ClientID, RedirectURL);
+            HttpRequestMessage request = _appleRestClient.GenerateRequestMessage(TokenType.RefreshToken, refreshToken, clientSecret, ClientID, RedirectURL, baseUrl, queryString);
 
             string response = await _appleRestClient.SendRequest(request);
 
@@ -129,12 +133,14 @@ namespace AppleAuth
         /// <param name="token">The user refresh token or access token intended to be revoked. The user session associated with the token provided is revoked if the request is successful.</param>
         /// <param name="privateKey">Content of the .p8 key file.</param>
         /// <param name="tokenType">TokenType.AccessToken or TokenType.RefreshToken. Optional</param>
-        public async Task RevokeToken(string token, string privateKey, string tokenType)
+        /// <param name="baseUrl">By default base url is the url of Sign in with Apple, but you can provide another URL for testing purposes.</param>
+        /// <param name="queryString">By default that is either the /authorize or /revoke endpoint, but you can provide any query string for testing purposes.</param>
+        public async Task RevokeToken(string token, string privateKey, string tokenType, string baseUrl = "https://appleid.apple.com/", string queryString = "auth/revoke")
         {
             ValidateStringParameters(new List<string> { token, privateKey });
             string clientSecret = _tokenGenerator.GenerateAppleClientSecret(privateKey, TeamID, ClientID, KeyID);
 
-            HttpRequestMessage request = _appleRestClient.GenerateRevokeMessage(token, clientSecret, ClientID, tokenType);
+            HttpRequestMessage request = _appleRestClient.GenerateRevokeMessage(token, clientSecret, ClientID, tokenType, baseUrl, queryString);
 
             string response = await _appleRestClient.SendRequest(request);
         }
@@ -148,7 +154,8 @@ namespace AppleAuth
         /// <returns>string/url</returns>
         public string GetButtonHref()
         {
-            var baseUrl = GlobalConstants.AppleAuthorizeURL;
+            var baseUrl = "https://appleid.apple.com/auth/authorize";
+
             var requestParams = $"?client_id={ClientID}&scope=name email&redirect_uri={RedirectURL}&state={State}&response_type=code id_token&response_mode=form_post&usePopup=true";
 
             return baseUrl + requestParams;

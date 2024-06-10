@@ -103,7 +103,9 @@ namespace AppleAuth.Cryptography
         public string GetFormattedPrivateKey(string keyString)
         {
             StringBuilder cleanedKey = new StringBuilder();
-            var keyLines = keyString.Split(GlobalConstants.NewLineSeparators, StringSplitOptions.RemoveEmptyEntries);
+            string[] newLineSeparators =  { "\r", "\n", "\r\n" };
+
+            var keyLines = keyString.Split(newLineSeparators, StringSplitOptions.RemoveEmptyEntries);
 
             for (int i = 0; i < keyLines.Length; i++)
             {

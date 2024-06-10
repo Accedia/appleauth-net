@@ -1,5 +1,4 @@
-﻿using AppleAuth.Constants;
-using AppleAuth.Exceptions;
+﻿using AppleAuth.Exceptions;
 using AppleAuth.TokenObjects;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -36,7 +35,7 @@ namespace AppleAuth.Http
         /// <summary>
         /// Generates an HttpRequestMessage as described in Apple's documentation: https://developer.apple.com/documentation/sign_in_with_apple/generate_and_validate_tokens
         /// </summary>
-        internal HttpRequestMessage GenerateRequestMessage(string tokenType, string authorizationCode, string clientSecret, string clientId, string redirectUrl)
+        internal HttpRequestMessage GenerateRequestMessage(string tokenType, string authorizationCode, string clientSecret, string clientId, string redirectUrl, string baseUrl, string queryString)
         {
             var bodyAsPairs = new List<KeyValuePair<string, string>>()
             {
@@ -55,13 +54,15 @@ namespace AppleAuth.Http
 
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-            return new HttpRequestMessage(HttpMethod.Post, GlobalConstants.AppleAuthorizeTokenURL) { Content = content };
+            string apiURL = string.Concat(baseUrl, queryString);
+
+            return new HttpRequestMessage(HttpMethod.Post, apiURL) { Content = content };
         }
 
         /// <summary>
         /// Generates an HttpRequestMessage for token revoke as described in Apple's documentation: https://developer.apple.com/documentation/sign_in_with_apple/revoke_tokens
         /// </summary>
-        internal HttpRequestMessage GenerateRevokeMessage(string token, string clientSecret, string clientId, string tokenType)
+        internal HttpRequestMessage GenerateRevokeMessage(string token, string clientSecret, string clientId, string tokenType, string baseUrl, string queryString)
         {
             var bodyAsPairs = new List<KeyValuePair<string, string>>()
             {
@@ -80,7 +81,9 @@ namespace AppleAuth.Http
 
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-            return new HttpRequestMessage(HttpMethod.Post, GlobalConstants.AppleAuthorizeRevokeURL) { Content = content };
+            string apiURL = string.Concat(baseUrl, queryString);
+
+            return new HttpRequestMessage(HttpMethod.Post, apiURL) { Content = content };
         }
     }
 }
